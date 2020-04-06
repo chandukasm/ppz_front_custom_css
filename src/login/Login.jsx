@@ -49,7 +49,7 @@ export default class Login extends Component {
         <div className="outer-box ">
           <div className="container1">
             <div className="login-box">
-              <h1 className="display-4 ">login-ppz</h1>
+              <h1 className="display-4 ">LOGIN</h1>
               <div>
                 <label htmlFor="email" style={{ float: "left" }}>
                   email:
@@ -70,6 +70,7 @@ export default class Login extends Component {
                   name="password"
                   className="form-control"
                   onChange={this.handleChange}
+
                   // required
                 />
               </div>
@@ -77,10 +78,11 @@ export default class Login extends Component {
               <div className="m-1">
                 <button
                   className="btn btn-info "
-                  // style={{
-                  //   backgroundColor: "gray",
-                  //   width: "85px",
-                  // }}
+                  style={{
+                    backgroundColor: "#75aabd",
+                    width: "85px",
+                    borderColor: "#8bbae3",
+                  }}
                   onSubmit={this.handleSubmit}
                 >
                   login
