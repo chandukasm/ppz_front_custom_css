@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./css/login.css";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 export default class Login extends Component {
   state = {
@@ -8,13 +9,25 @@ export default class Login extends Component {
       email: "",
       password: "",
     },
+    redirectToReferer: false,
+  };
+
+  handleLoginPress = () => {
+    // const { redirectToReferer } = this.state;
+    console.log("called handleLoginPress");
+
+    this.props.handleLogin(
+      this.setState(() => ({
+        redirectToReferer: true,
+      }))
+    );
   };
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(this.state.user);
+
     try {
-      // console.log(this.state.user);
+      //k console.log(this.state.user);
       let res = await axios.post(
         "http://localhost:3000/api/auth",
         this.state.user
@@ -22,12 +35,15 @@ export default class Login extends Component {
       let { data } = res;
 
       localStorage.setItem("x-auth-token", data);
+      this.props.history.push(this.props.location.state.from.pathname);
+      this.handleLoginPress();
       console.log(data);
 
       // console.log(await data);
     } catch (error) {
-      console.log("Error :" + error.response.data);
-      alert(error.response.data);
+      console.log(error);
+      // console.log("Error :" + error.response.data);
+      // alert(error.response.data);
     }
 
     // axios
@@ -44,16 +60,21 @@ export default class Login extends Component {
   };
 
   render() {
+    const { redirectToReferer } = this.state;
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    if (redirectToReferer) {
+      return <Redirect to={from} />;
+    }
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="outer-box ">
           <div className="container1">
             <div className="login-box">
-              <h1 className="display-4 ">LOGIN</h1>
+              <h1 className="display-4  " style={{ textAlign: "center" }}>
+                LOGIN
+              </h1>
               <div>
-                <label htmlFor="email" style={{ float: "left" }}>
-                  email:
-                </label>
+                <label htmlFor="email">email:</label>
                 <input
                   name="email"
                   type="text"
@@ -62,9 +83,7 @@ export default class Login extends Component {
                   // required
                 />
                 <br />
-                <label htmlFor="password" style={{ float: "left" }}>
-                  Password:
-                </label>
+                <label htmlFor="password">Password:</label>
                 <input
                   type="text"
                   name="password"
@@ -75,13 +94,14 @@ export default class Login extends Component {
                 />
               </div>
 
-              <div className="m-1">
+              <div className="col text-center  ">
                 <button
                   className="btn btn-info "
                   style={{
                     backgroundColor: "#75aabd",
                     width: "85px",
                     borderColor: "#8bbae3",
+                    marginTop: "60px",
                   }}
                   onSubmit={this.handleSubmit}
                 >
